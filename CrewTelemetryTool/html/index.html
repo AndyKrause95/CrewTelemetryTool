@@ -11,39 +11,53 @@
 	}
 
 	function loop(i) {
-		i = i + 1;
 		if (i >= 100)
-			i = 0;
+			flipBit = false;
+		if (i <= 0)
+			flipBit = true;
+
 		setTimeout(function() {
 			updateValue("speed", i);
 			updateValue("rpm", i);
 			document.getElementById("rpmBarThing").style.width = i + '%';
 			loop(i)
 		}, 50);
+
+		if (flipBit)
+			i++
+		else
+			i--;
 	}
 
 	function connectionSocket() {
+		var SERVER = "192.168.178.47";
+		var PORT = "12345";
 		var infoDiv = document.getElementById("infoDiv");
-		infoDiv.innerHTML = "Trying to open Socket!";
-		webSocket = new WebSocket("ws://localhost:12345/");
+		infoDiv.innerHTML = "Trying to open Socket!</br>";
+		webSocket = new WebSocket("ws://" + SERVER + ":" + PORT + "/");
 
-		infoDiv.innerHTML = "Ready State: " + webSocket.readyState;
+		infoDiv.innerHTML += "Ready State: " + webSocket.readyState + "</br>";
 
 		//webSocket.send("Test");
 
 		webSocket.onopen = function() {
 			var infoDiv = document.getElementById("infoDiv");
-			infoDiv.innerHTML = "Socket open!";
+			infoDiv.innerHTML += "Socket open!</br>";
+		}
+
+		webSocket.onclose = function() {
+			var infoDiv = document.getElementById("infoDiv");
+			infoDiv.innerHTML += "Socket closed!</br>";
 		}
 
 		WebSocket.onerror = function(error) {
 			var infoDiv = document.getElementById("infoDiv");
-			infoDiv.innerHTML = "Error: " + error;
+			infoDiv.innerHTML += "Error: " + error + "</br>";
 		}
 
 		webSocket.onmessage = function(event) {
 			var dataDiv = document.getElementById("dataDiv");
-			dataDiv.innerHTML = "Message Received";
+			dataDiv.innerHTML += "Message Received</br>";
 			return false;
 		}
 	}
@@ -72,14 +86,14 @@ body {
 
 .dataBlock .title {
 	color: red;
-	font-size: 100px;
+	font-size: 80px;
 	box-sizing: border-box;
 }
 
 .dataBlock .value {
 	color: green;
 	font-weight: bold;
-	font-size: 100px;
+	font-size: 80px;
 	box-sizing: border-box;
 }
 
@@ -109,11 +123,11 @@ body {
 <body onLoad='main(0)'>
 	<div class='container'>
 		<div class='dataBlock'>
-			<span class='title'>Speed:</span><span class='value' id='speed'>No
+			<span class='title'>Speed: </span><span class='value' id='speed'>No
 				Data</span>
 		</div>
 		<div class='dataBlock'>
-			<span class='title'>RPM:</span><span class='value' id='rpm'>No
+			<span class='title'>RPM: </span><span class='value' id='rpm'>No
 				Data</span>
 		</div>
 		<div class='rpmBar'>
