@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Crew Telemetry Tool</title>
+</head>
+<script>
+	function main(i) {
+		loop(0);
+		connectionSocket();
+	}
+
+	function loop(i) {
+		i = i + 1;
+		if (i >= 100)
+			i = 0;
+		setTimeout(function() {
+			updateValue("speed", i);
+			updateValue("rpm", i);
+			document.getElementById("rpmBarThing").style.width = i + '%';
+			loop(i)
+		}, 50);
+	}
+
+	function connectionSocket() {
+		var PORT = 4446;
+		var MULTICAST_ADDR = '192.168.178.47';
+		var client = createSocket('udp4');
+
+		client.on('listening', function() {
+			client.setBroadcast(true);
+			var address = client.address();
+			console.log('UDP Client listening on ' + address.address + ":"
+					+ address.port);
+		});
+
+		client.on('message', function(message, rinfo) {
+			console.log('Message from: ' + rinfo.address + ':' + rinfo.port
+					+ ' - ' + message);
+		});
+
+		client.bind(PORT, function() {
+			client.addMembership(MULTICAST_ADDR);
+		});
+	}
+
+	function updateValue(elementID, value) {
+		var element = document.getElementById(elementID);
+		element.textContent = value;
+	}
+</script>
+<style>
+body {
+	background-color: black;
+	color: white;
+	font-family: arial;
+}
+
+.dataBlock {
+	display: inline-block;
+	width: 50%;
+	height: 25%;
+	border-width: 2px;
+	border-style: solid;
+	border-color: red;
+	box-sizing: border-box;
+}
+
+.dataBlock .title {
+	color: red;
+	font-size: 100px;
+	box-sizing: border-box;
+}
+
+.dataBlock .value {
+	color: green;
+	font-weight: bold;
+	font-size: 100px;
+	box-sizing: border-box;
+}
+
+.rpmBar {
+	width: 100%;
+	height: 100px;
+	background-color: grey;
+	box-sizing: border-box;
+}
+
+.rpmBar .value {
+	width: 0%;
+	height: 100%;
+	background-color: green;
+	box-sizing: border-box;
+}
+
+.container {
+	overflow: hidden;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	white-space: nowrap;
+}
+</style>
+<body onLoad='main(0)'>
+	<div class='container'>
+		<div class='dataBlock'>
+			<span class='title'>Speed:</span><span class='value' id='speed'>No
+				Data</span>
+		</div>
+		<div class='dataBlock'>
+			<span class='title'>RPM:</span><span class='value' id='rpm'>No
+				Data</span>
+		</div>
+		<div class='rpmBar'>
+			<div id='rpmBarThing' class='value'></div>
+		</div>
+	</div>
+</body>
+</html>
