@@ -5,7 +5,20 @@
 <title>Crew Telemetry Tool</title>
 </head>
 <script>
-	
+	function main(i) {
+		i = i + 1;
+		if (i >= 100)
+			i = 0;
+		setTimeout(function() {
+			updateValue("speed", i);
+			main(i)
+		}, 50);
+	}
+
+	function updateValue(elementID, value) {
+		var element = document.getElementById(elementID);
+		element.textContent = value;
+	}
 </script>
 <style>
 body {
@@ -39,7 +52,7 @@ body {
 	padding: 10px;
 }
 </style>
-<body>
+<body onLoad='main(0)'>
 	<div class='container'>
 		<div class='dataBlock'>
 			<span class='title'>Speed: </span><span class='value' id='speed'>No
