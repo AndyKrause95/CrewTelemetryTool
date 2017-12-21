@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>Test Website</title>
+    </head>
+    <script type="text/javascript">
+        var webSocket;
+        
+        function test() {
+            var infoDiv = document.getElementById("infoDiv");
+            infoDiv.innerHTML = "Trying to open Socket!";
+            webSocket = new WebSocket("ws://localhost:12345/");
+            
+            infoDiv.innerHTML = "Ready State: " + webSocket.readyState;
+            
+            //webSocket.send("Test");
+            
+            webSocket.onopen = function() {
+                var infoDiv = document.getElementById("infoDiv");
+                infoDiv.innerHTML = "Socket open!";   
+            }
+            
+
+            WebSocket.onerror = function(error) {
+                var infoDiv = document.getElementById("infoDiv");
+                infoDiv.innerHTML = "Error: " + error;   
+            }
+
+            webSocket.onmessage = function(event) {
+                var dataDiv = document.getElementById("dataDiv");
+                dataDiv.innerHTML = "Message Received";
+                //var msg = JSON.parse(event.data);
+                //dataDiv.innerHTML = "Data: " + msg;
+                return false;
+            }
+        }
+        
+        function checkReadyState() {
+            var checkDiv = document.getElementById("checkDiv");
+            checkDiv.innerHTML = "Ready State Check: " + webSocket.readyState;
+        }
+        
+        function send(){
+            webSocket.send("Yooo bist du da?");   
+        }
+        
+    </script>
+    <body>
+        <input type="submit" name="testButton" value="Click to open Socket" onclick="return test()">
+        <input type="submit" name="sendButton" value="Click here to send something to the WEBS" onclick="return send()">
+        <input type="submit" name="checkReadyState" value="Check Ready State" onclick="return checkReadyState()">
+        <div id="infoDiv">
+        </div>
+        <div id="dataDiv">
+        </div>
+        <div id="checkDiv">
+        </div>
+    </body>
+</html>
