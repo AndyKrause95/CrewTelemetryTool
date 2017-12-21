@@ -1,6 +1,7 @@
 package crewtelemetrytool.server;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
@@ -41,6 +42,10 @@ public class WebSocketServer {
 				.getBytes("UTF-8");
 
 		client.getOutputStream().write(response, 0, response.length);
+
+		System.out.println("Sending Data to Client");
+		byte[] socketData = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+		client.getOutputStream().write(socketData, 0, socketData.length);
 
 	}
 

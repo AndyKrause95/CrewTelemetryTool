@@ -74,7 +74,6 @@ public class UDPTest {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			ObjectOutputStream os = new ObjectOutputStream(outputStream);
 			os.writeObject(data);
-			// byte[] sendData = outputStream.toByteArray();
 
 
 
