@@ -23,25 +23,29 @@
 	}
 
 	function connectionSocket() {
-		var PORT = 4446;
-		var MULTICAST_ADDR = '192.168.178.47';
-		var client = createSocket('udp4');
+		var infoDiv = document.getElementById("infoDiv");
+		infoDiv.innerHTML = "Trying to open Socket!";
+		webSocket = new WebSocket("ws://localhost:12345/");
 
-		client.on('listening', function() {
-			client.setBroadcast(true);
-			var address = client.address();
-			console.log('UDP Client listening on ' + address.address + ":"
-					+ address.port);
-		});
+		infoDiv.innerHTML = "Ready State: " + webSocket.readyState;
 
-		client.on('message', function(message, rinfo) {
-			console.log('Message from: ' + rinfo.address + ':' + rinfo.port
-					+ ' - ' + message);
-		});
+		//webSocket.send("Test");
 
-		client.bind(PORT, function() {
-			client.addMembership(MULTICAST_ADDR);
-		});
+		webSocket.onopen = function() {
+			var infoDiv = document.getElementById("infoDiv");
+			infoDiv.innerHTML = "Socket open!";
+		}
+
+		WebSocket.onerror = function(error) {
+			var infoDiv = document.getElementById("infoDiv");
+			infoDiv.innerHTML = "Error: " + error;
+		}
+
+		webSocket.onmessage = function(event) {
+			var dataDiv = document.getElementById("dataDiv");
+			dataDiv.innerHTML = "Message Received";
+			return false;
+		}
 	}
 
 	function updateValue(elementID, value) {
@@ -115,6 +119,8 @@ body {
 		<div class='rpmBar'>
 			<div id='rpmBarThing' class='value'></div>
 		</div>
+		<div id='infoDiv'></div>
+		<div id='dataDiv'></div>
 	</div>
 </body>
 </html>

@@ -76,13 +76,7 @@ public class UDPTest {
 			os.writeObject(data);
 			// byte[] sendData = outputStream.toByteArray();
 
-			// TEST
-			ByteArrayOutputStream outputStreamTest = new ByteArrayOutputStream(12);
-			LittleEndianDataOutputStream littleEndianOutputStream = new LittleEndianDataOutputStream(outputStreamTest);
-			littleEndianOutputStream.writeInt(1);
-			littleEndianOutputStream.writeInt(1);
-			littleEndianOutputStream.writeInt(0);
-			byte[] handshakeThing = outputStreamTest.toByteArray();
+
 
 			// ENDIAN STUFF
 			ByteBuffer buf = ByteBuffer.allocate(12);
@@ -112,15 +106,6 @@ public class UDPTest {
 			// -------------------------------------------------
 
 			byte[] sub = { (byte) 1, (byte) 1, (byte) 1 };
-
-			// TEST
-			ByteArrayOutputStream outputStreamTest2 = new ByteArrayOutputStream(12);
-			LittleEndianDataOutputStream littleEndianOutputStream2 = new LittleEndianDataOutputStream(
-					outputStreamTest2);
-			littleEndianOutputStream2.writeInt(1);
-			littleEndianOutputStream2.writeInt(1);
-			littleEndianOutputStream2.writeInt(1);
-			byte[] subscribeThing = outputStreamTest2.toByteArray();
 
 			// ENDIAN STUFF
 			ByteBuffer bufSub = ByteBuffer.allocate(12);
